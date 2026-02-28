@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnlyPans — AI Meal Planning, One-Click Grocery Ordering</title>
+  <meta name="description" content="OnlyPans generates your weekly meal plan and orders groceries automatically. 60 seconds from notification to doorstep.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAF7F2;
+      --fg: #1A1A18;
+      --accent: #E8543E;
+      --accent-hover: #D14430;
+      --muted: #8C8577;
+      --card: #FFFFFF;
+      --card-border: #E8E4DD;
+      --green: #3A7D44;
+      --green-bg: #EBF5ED;
+      --warm-gray: #F2EDE6;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'DM Sans', -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(250, 247, 242, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(232, 228, 221, 0.6);
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--fg);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .nav-cta {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.6rem 1.4rem;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .nav-cta:hover { transform: scale(1.03); background: #333; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(232, 84, 62, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(58, 125, 68, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      background: var(--green-bg);
+      color: var(--green);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-form {
+      display: flex;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero-form input {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      padding: 0.85rem 1.25rem;
+      border: 1.5px solid var(--card-border);
+      border-radius: 100px;
+      background: var(--card);
+      width: 280px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .hero-form input:focus {
+      border-color: var(--accent);
+    }
+
+    .hero-form input::placeholder {
+      color: #B5AFA6;
+    }
+
+    .hero-form button {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .hero-form button:hover {
+      background: var(--accent-hover);
+      transform: scale(1.02);
+    }
+
+    .hero-proof {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how {
+      padding: 6rem 2rem 8rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .how h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.025em;
+      margin-bottom: 4rem;
+      max-width: 550px;
+      line-height: 1.15;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+    }
+
+    .step-number {
+      font-family: var(--serif);
+      font-size: 3.5rem;
+      color: rgba(232, 84, 62, 0.12);
+      line-height: 1;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ─── DEMO PREVIEW ─── */
+    .demo {
+      padding: 4rem 2rem 8rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .demo-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.05);
+    }
+
+    .demo-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .demo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    .demo-body {
+      padding: 2rem;
+      font-family: 'DM Sans', monospace;
+      font-size: 0.88rem;
+      line-height: 2;
+    }
+
+    .demo-line {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .demo-line.visible {
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .demo-label {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-meal {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+    }
+
+    .demo-meal-name { font-weight: 500; }
+    .demo-meal-time { color: var(--muted); font-size: 0.8rem; }
+
+    .demo-cta {
+      display: block;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .demo-cta:hover { background: var(--accent-hover); }
+
+    .demo-footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ─── ARCHITECTURE ─── */
+    .arch {
+      padding: 6rem 2rem 8rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .arch h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+
+    .arch > p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+      max-width: 500px;
+    }
+
+    .arch-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      position: relative;
+    }
+
+    .arch-node {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .arch-node:first-child { border-radius: 16px 0 0 16px; }
+    .arch-node:last-child { border-radius: 0 16px 16px 0; }
+
+    .arch-node:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+      z-index: 2;
+    }
+
+    .arch-node-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .arch-node h4 {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .arch-node p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .arch-node .arch-tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      background: var(--warm-gray);
+      color: var(--muted);
+    }
+
+    .arch-node .arch-tag.tag-accent {
+      background: rgba(232, 84, 62, 0.1);
+      color: var(--accent);
+    }
+
+    .arch-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      flex-shrink: 0;
+      color: var(--card-border);
+      font-size: 1.2rem;
+      background: var(--card);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .arch-detail {
+      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .arch-detail-item {
+      padding: 1.5rem;
+      background: var(--warm-gray);
+      border-radius: 12px;
+    }
+
+    .arch-detail-item h5 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .arch-detail-item p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--fg);
+    }
+
+    .arch-detail-item code {
+      font-size: 0.78rem;
+      background: rgba(0,0,0,0.05);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'DM Sans', monospace;
+    }
+
+    @media (max-width: 768px) {
+      .arch { padding: 4rem 1.5rem 5rem; }
+      .arch-flow { flex-direction: column; gap: 0; }
+      .arch-node:first-child { border-radius: 16px 16px 0 0; }
+      .arch-node:last-child { border-radius: 0 0 16px 16px; }
+      .arch-arrow {
+        width: 100%;
+        height: 32px;
+        border-top: none;
+        border-bottom: none;
+        border-left: 1px solid var(--card-border);
+        border-right: 1px solid var(--card-border);
+        transform: rotate(90deg);
+      }
+      .arch-detail { grid-template-columns: 1fr; }
+    }
+
+    /* ─── BOTTOM CTA ─── */
+    .bottom-cta {
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .bottom-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 0%, var(--warm-gray) 40%, var(--warm-gray) 60%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .bottom-cta h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .bottom-cta p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .bottom-cta .hero-form {
+      justify-content: center;
+      position: relative;
+      opacity: 1;
+      animation: none;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--fg); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .logo { font-size: 1.25rem; }
+      .hero { padding: 7rem 1.5rem 3rem; min-height: auto; padding-bottom: 5rem; }
+      .hero-form { flex-direction: column; width: 100%; max-width: 340px; }
+      .hero-form input { width: 100%; }
+      .hero-form button { width: 100%; }
+      .steps { grid-template-columns: 1fr; gap: 1.25rem; }
+      .step { padding: 2rem 1.5rem; }
+      .how { padding: 4rem 1.5rem 5rem; }
+      .demo { padding: 2rem 1.5rem 5rem; }
+      .bottom-cta { padding: 5rem 1.5rem; }
+      .bottom-cta .hero-form { flex-direction: column; align-items: center; }
+    }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--fg);
+      color: var(--bg);
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 200;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">Only<span>Pans</span></a>
+    <a href="#waitlist" class="nav-cta">Get Early Access</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="pill">Now in private beta</div>
+    <h1>Your week's meals, <em>planned & ordered</em></h1>
+    <p class="hero-sub">AI generates your meal plan. Groceries show up at your door. You spend 60 seconds instead of 60 minutes.</p>
+    <form class="hero-form" id="hero-signup">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit">Join the Waitlist</button>
+    </form>
+    <p class="hero-proof">Powered by Instacart delivery · Works with Whole Foods, Safeway, Costco & more</p>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <p class="section-label">How it works</p>
+    <h2>Three steps. One minute. Dinner's handled.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">01</div>
+        <div class="step-icon">🧠</div>
+        <h3>AI plans your week</h3>
+        <p>Every Sunday, OnlyPans generates a personalized meal plan based on your diet, budget, household size, and what you've eaten recently. No repeats, no waste.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <div class="step-icon">🛒</div>
+        <h3>Groceries, auto-matched</h3>
+        <p>Ingredients are consolidated, deduplicated, and matched to real products at your preferred store. Pantry staples you already have are excluded.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <div class="step-icon">📱</div>
+        <h3>Tap, review, done</h3>
+        <p>Get a notification with your meals and a one-click Instacart link. Swap anything you want, pick a delivery window, checkout. Groceries arrive in hours.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO PREVIEW -->
+  <section class="demo">
+    <p class="section-label" style="text-align:center;">What Sunday morning looks like</p>
+    <div class="demo-card">
+      <div class="demo-header">
+        <div class="demo-dot"></div>
+        OnlyPans · Sunday, 8:00 AM
+      </div>
+      <div class="demo-body" id="demo-body">
+        <div class="demo-line" style="font-weight:600;font-size:1.05rem;">🍽️ Your meals for the week of Mar 2</div>
+
+        <div class="demo-label demo-line">Dinners</div>
+        <div class="demo-meal demo-line">
+          <span class="demo-meal-name">Mon · Thai Basil Chicken Stir-Fry</span>
+          <span class="demo-meal-time">25 min</span>
+        </div>
+        <div class="demo-meal demo-line">
+          <span class="demo-meal-name">Tue · Salmon Rice Bowls w/ Avocado</span>
+          <span class="demo-meal-time">20 min</span>
+        </div>
+        <div class="demo-meal demo-line">
+          <span class="demo-meal-name">Wed · Sheet Pan Chicken Shawarma</span>
+          <span class="demo-meal-time">35 min</span>
+        </div>
+        <div class="demo-meal demo-line">
+          <span class="demo-meal-name">Thu · Black Bean Tacos w/ Mango Slaw</span>
+          <span class="demo-meal-time">15 min</span>
+        </div>
+        <div class="demo-meal demo-line">
+          <span class="demo-meal-name">Fri · Lemon Herb Pasta w/ Shrimp</span>
+          <span class="demo-meal-time">20 min</span>
+        </div>
+
+        <div class="demo-label demo-line">Grocery List</div>
+        <div class="demo-line" style="color:var(--muted);">23 items · ~$87 estimated · Whole Foods, SOMA</div>
+
+        <a href="#waitlist" class="demo-cta demo-line">Review & Order on Instacart →</a>
+      </div>
+      <div class="demo-footer">
+        Delivered by Instacart · Usually within 2 hours
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE / INTEGRATION -->
+  <section class="arch">
+    <p class="section-label">Under the hood</p>
+    <h2>Simple architecture, powerful result</h2>
+    <p>Four components. One API call to Instacart. No complex infrastructure.</p>
+
+    <div class="arch-flow">
+      <div class="arch-node">
+        <div class="arch-node-icon">🧠</div>
+        <h4>AI Meal Planner</h4>
+        <p>Generates personalized weekly meals, avoids repeats, maximizes ingredient overlap</p>
+        <span class="arch-tag">Claude API</span>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="arch-node-icon">📋</div>
+        <h4>Grocery Engine</h4>
+        <p>Deduplicates ingredients, adjusts quantities, excludes pantry staples</p>
+        <span class="arch-tag">OnlyPans</span>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="arch-node-icon">🛒</div>
+        <h4>Product Matching</h4>
+        <p>Maps ingredients to real SKUs, checks availability, builds shoppable cart</p>
+        <span class="arch-tag tag-accent">Instacart IDP</span>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="arch-node-icon">📱</div>
+        <h4>You</h4>
+        <p>Review products, pick delivery window, checkout in 60 seconds</p>
+        <span class="arch-tag tag-accent">Instacart</span>
+      </div>
+    </div>
+
+    <div class="arch-detail">
+      <div class="arch-detail-item">
+        <h5>Instacart Integration</h5>
+        <p>Single endpoint: <code>POST /idp/v1/products/recipe</code> creates a shoppable page with matched products. Users complete checkout natively in the Instacart app.</p>
+      </div>
+      <div class="arch-detail-item">
+        <h5>What We Don't Touch</h5>
+        <p>Payment, delivery logistics, shopper assignment, and substitution handling are all managed by Instacart. We generate the list — they handle the rest.</p>
+      </div>
+      <div class="arch-detail-item">
+        <h5>Store Coverage</h5>
+        <p>Instacart's network of 1,500+ retail banners means OnlyPans works everywhere — Whole Foods, Safeway, Costco, Kroger, and thousands more.</p>
+      </div>
+      <div class="arch-detail-item">
+        <h5>Human in the Loop</h5>
+        <p>No order is placed without user review. Every week, you see the full meal plan and grocery list before tapping "checkout." Swap, remove, or add anything.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="bottom-cta" id="waitlist">
+    <h2>Stop overthinking dinner.</h2>
+    <p>Join the waitlist. We'll let you in soon.</p>
+    <form class="hero-form" id="bottom-signup">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit">Join the Waitlist</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>OnlyPans is built by <a href="https://pipelineom.com" target="_blank">OM</a> · San Francisco, CA</p>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">✓ You're on the list. We'll be in touch.</div>
+
+  <script>
+    // ─── Waitlist signup (stores emails in localStorage for now, swap for real backend later)
+    function handleSignup(e) {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      const email = input.value.trim();
+      if (!email) return;
+
+      // In production: POST to your API / Supabase / Airtable
+      console.log('Waitlist signup:', email);
+
+      input.value = '';
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.getElementById('hero-signup').addEventListener('submit', handleSignup);
+    document.getElementById('bottom-signup').addEventListener('submit', handleSignup);
+
+    // ─── Demo animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const lines = entry.target.querySelectorAll('.demo-line');
+          lines.forEach((line, i) => {
+            setTimeout(() => line.classList.add('visible'), i * 120);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(document.getElementById('demo-body'));
+
+    // ─── Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  </script>
+
+</body>
+</html>
