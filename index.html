@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OnlyPans — AI Meal Planning, One-Click Grocery Ordering</title>
-  <meta name="description" content="OnlyPans generates your weekly meal plan and orders groceries automatically. 60 seconds from notification to doorstep.">
+  <title>OnlyPans — Your AI Sous Chef</title>
+  <meta name="description" content="Scan your fridge, get a 3-day meal plan, order missing groceries, and cook hands-free with voice AI. OnlyPans closes the loop from idea to dinner.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
@@ -55,7 +55,8 @@
 
     .logo {
       font-family: var(--serif);
-      font-size: 1.5rem;
+      font-size: 1.75rem;
+      font-weight: 600;
       color: var(--fg);
       text-decoration: none;
       letter-spacing: -0.02em;
@@ -137,20 +138,33 @@
       animation: pulse 2s infinite;
     }
 
-    h1 {
+    .hero-logo {
       font-family: var(--serif);
-      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-size: clamp(3.25rem, 9vw, 7rem);
+      font-weight: 600;
       line-height: 1.05;
       letter-spacing: -0.03em;
-      max-width: 800px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.5rem;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.1s forwards;
     }
 
-    h1 em {
-      font-style: italic;
-      color: var(--accent);
+    .hero-logo a {
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    .hero-logo .brand-accent { color: var(--accent); }
+
+    .hero-tagline {
+      font-family: var(--sans);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.15s forwards;
     }
 
     .hero-sub {
@@ -209,6 +223,28 @@
       transform: scale(1.02);
     }
 
+    .hero-cta {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.9rem 2.25rem;
+      background: var(--accent);
+      color: white;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--accent-hover);
+      transform: scale(1.02);
+      color: white;
+    }
+
     .hero-proof {
       margin-top: 2rem;
       font-size: 0.8rem;
@@ -244,8 +280,8 @@
 
     .steps {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
     }
 
     .step {
@@ -528,6 +564,36 @@
       .arch-detail { grid-template-columns: 1fr; }
     }
 
+    /* ─── COMING SOON ─── */
+    .coming-soon {
+      padding: 6rem 2rem 8rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .coming-soon h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.025em;
+      margin-bottom: 2.5rem;
+      line-height: 1.15;
+    }
+
+    .coming-soon-list {
+      list-style: none;
+    }
+
+    .coming-soon-list li {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .coming-soon-list li:last-child { border-bottom: none; }
+    .coming-soon-list strong { color: var(--fg); font-weight: 600; }
+
     /* ─── BOTTOM CTA ─── */
     .bottom-cta {
       padding: 8rem 2rem;
@@ -558,9 +624,8 @@
       position: relative;
     }
 
-    .bottom-cta .hero-form {
-      justify-content: center;
-      position: relative;
+    .bottom-cta .hero-cta {
+      margin-top: 0;
       opacity: 1;
       animation: none;
     }
@@ -593,229 +658,200 @@
     }
 
     /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .steps { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 768px) {
       nav { padding: 1rem 1.25rem; }
-      .logo { font-size: 1.25rem; }
+      .logo { font-size: 1.5rem; }
       .hero { padding: 7rem 1.5rem 3rem; min-height: auto; padding-bottom: 5rem; }
-      .hero-form { flex-direction: column; width: 100%; max-width: 340px; }
-      .hero-form input { width: 100%; }
-      .hero-form button { width: 100%; }
       .steps { grid-template-columns: 1fr; gap: 1.25rem; }
       .step { padding: 2rem 1.5rem; }
       .how { padding: 4rem 1.5rem 5rem; }
       .demo { padding: 2rem 1.5rem 5rem; }
       .bottom-cta { padding: 5rem 1.5rem; }
-      .bottom-cta .hero-form { flex-direction: column; align-items: center; }
+      .coming-soon { padding: 4rem 1.5rem 5rem; }
     }
 
-    /* ─── TOAST ─── */
-    .toast {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--fg);
-      color: var(--bg);
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      z-index: 200;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
   </style>
 </head>
 <body>
 
   <!-- NAV -->
   <nav>
-    <a href="https://onlypans-app.vercel.app/" class="logo" target="_blank" rel="noopener">Only<span>Pans</span></a>
+    <a href="https://onlypans-app.vercel.app/" class="logo" target="_blank" rel="noopener">🍳 Only<span>Pans</span></a>
     <a href="https://onlypans-app.vercel.app/" class="nav-cta" target="_blank" rel="noopener">Open the App</a>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <div class="pill">Now in private beta</div>
-    <h1>Your week's meals, <em>planned & ordered</em></h1>
-    <p class="hero-sub">AI generates your meal plan. Groceries show up at your door. You spend 60 seconds instead of 60 minutes.</p>
-    <form class="hero-form" id="hero-signup">
-      <input type="email" placeholder="your@email.com" required>
-      <button type="submit">Join the Waitlist</button>
-    </form>
-    <p class="hero-proof">Powered by Instacart delivery · Works with Whole Foods, Safeway, Costco & more</p>
-    <p class="hero-proof" style="margin-top:0.75rem;"><a href="https://onlypans-app.vercel.app/" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500;text-decoration:none;">Try the app →</a></p>
+    <h1 class="hero-logo"><a href="https://onlypans-app.vercel.app/" target="_blank" rel="noopener">🍳 Only<span class="brand-accent">Pans</span></a></h1>
+    <p class="hero-tagline">Your AI sous chef</p>
+    <p class="hero-sub">From "I have no idea what to make" to "I just cooked a great meal" — entirely hands-free. Scan your fridge, get a personalized 3-day meal plan, order missing groceries, and cook with G-Rams guiding every step.</p>
+    <p class="hero-proof">Scan → Plan → Order → Cook with voice AI → Pantry updates. The loop gets smarter every time.</p>
+    <a href="https://onlypans-app.vercel.app/" class="hero-cta" target="_blank" rel="noopener">Open OnlyPans</a>
   </section>
 
   <!-- HOW IT WORKS -->
   <section class="how">
-    <p class="section-label">How it works</p>
-    <h2>Three steps. One minute. Dinner's handled.</h2>
+    <p class="section-label">The full loop</p>
+    <h2>From fridge to plate. Every step feeds the next.</h2>
     <div class="steps">
       <div class="step">
         <div class="step-number">01</div>
-        <div class="step-icon">🧠</div>
-        <h3>AI plans your week</h3>
-        <p>Every Sunday, OnlyPans generates a personalized meal plan based on your diet, budget, household size, and what you've eaten recently. No repeats, no waste.</p>
+        <div class="step-icon">📸</div>
+        <h3>Visual Fridge Scanner</h3>
+        <p>Upload a photo — Pixtral identifies every ingredient with labels right on the image. Tap anywhere to catch what it missed. See exactly what it found.</p>
       </div>
       <div class="step">
         <div class="step-number">02</div>
-        <div class="step-icon">🛒</div>
-        <h3>Groceries, auto-matched</h3>
-        <p>Ingredients are consolidated, deduplicated, and matched to real products at your preferred store. Pantry staples you already have are excluded.</p>
+        <div class="step-icon">📋</div>
+        <h3>3-Day AI Meal Plan</h3>
+        <p>Mistral builds Breakfast, Lunch, Snack, Dinner & Drinks. Meals ranked by pantry match so you use what you have first. Toggle categories, plan regenerates.</p>
       </div>
       <div class="step">
         <div class="step-number">03</div>
-        <div class="step-icon">📱</div>
-        <h3>Tap, review, done</h3>
-        <p>Get a notification with your meals and a one-click Instacart link. Swap anything you want, pick a delivery window, checkout. Groceries arrive in hours.</p>
+        <div class="step-icon">🛒</div>
+        <h3>One-Tap Groceries</h3>
+        <p>Missing ingredients from all planned meals in one list. One tap sends everything to Instacart.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">04</div>
+        <div class="step-icon">🎙️</div>
+        <h3>Cook Mode — G-Rams</h3>
+        <p>Hands-free dark UI. G-Rams (British chef voice) reads each step aloud. Say "next", "repeat", or ask anything mid-cook. Voice-first, dirty-hands ready.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">05</div>
+        <div class="step-icon">🔄</div>
+        <h3>Living Pantry</h3>
+        <p>After cooking, Mistral updates what you used — ok, low, or depleted. Next meal plan reflects it. The loop gets smarter every time.</p>
       </div>
     </div>
   </section>
 
-  <!-- DEMO PREVIEW -->
+  <!-- DEMO PREVIEW — Cook Mode / G-Rams -->
   <section class="demo">
-    <p class="section-label" style="text-align:center;">What Sunday morning looks like</p>
+    <p class="section-label" style="text-align:center;">Hands-free in the kitchen</p>
     <div class="demo-card">
       <div class="demo-header">
         <div class="demo-dot"></div>
-        OnlyPans · Sunday, 8:00 AM
+        Cook Mode · G-Rams, your AI sous chef
       </div>
       <div class="demo-body" id="demo-body">
-        <div class="demo-line" style="font-weight:600;font-size:1.05rem;">🍽️ Your meals for the week of Mar 2</div>
+        <div class="demo-line" style="font-weight:600;font-size:1.05rem;">🎙️ Full-screen dark UI. Built for dirty hands.</div>
 
-        <div class="demo-label demo-line">Dinners</div>
+        <div class="demo-label demo-line">Voice commands</div>
         <div class="demo-meal demo-line">
-          <span class="demo-meal-name">Mon · Thai Basil Chicken Stir-Fry</span>
-          <span class="demo-meal-time">25 min</span>
+          <span class="demo-meal-name">"Next"</span>
+          <span class="demo-meal-time">advance to next step</span>
         </div>
         <div class="demo-meal demo-line">
-          <span class="demo-meal-name">Tue · Salmon Rice Bowls w/ Avocado</span>
-          <span class="demo-meal-time">20 min</span>
+          <span class="demo-meal-name">"Repeat"</span>
+          <span class="demo-meal-time">re-hear the step</span>
         </div>
         <div class="demo-meal demo-line">
-          <span class="demo-meal-name">Wed · Sheet Pan Chicken Shawarma</span>
-          <span class="demo-meal-time">35 min</span>
-        </div>
-        <div class="demo-meal demo-line">
-          <span class="demo-meal-name">Thu · Black Bean Tacos w/ Mango Slaw</span>
-          <span class="demo-meal-time">15 min</span>
-        </div>
-        <div class="demo-meal demo-line">
-          <span class="demo-meal-name">Fri · Lemon Herb Pasta w/ Shrimp</span>
-          <span class="demo-meal-time">20 min</span>
+          <span class="demo-meal-name">Ask anything mid-cook</span>
+          <span class="demo-meal-time">G-Rams answers in context</span>
         </div>
 
-        <div class="demo-label demo-line">Grocery List</div>
-        <div class="demo-line" style="color:var(--muted);">23 items · ~$87 estimated · Whole Foods, SOMA</div>
+        <div class="demo-label demo-line">How it works</div>
+        <div class="demo-line" style="color:var(--muted);">British chef voice (ElevenLabs) reads each step aloud. Web Speech API for hands-free commands. Pantry auto-updates when you're done.</div>
 
-        <a href="https://onlypans-app.vercel.app/" class="demo-cta demo-line" target="_blank" rel="noopener">Open in OnlyPans →</a>
+        <a href="https://onlypans-app.vercel.app/" class="demo-cta demo-line" target="_blank" rel="noopener">Try Cook Mode in OnlyPans →</a>
       </div>
       <div class="demo-footer">
-        Delivered by Instacart · Usually within 2 hours
+        No recipe app tells you what to do. G-Rams does.
       </div>
     </div>
   </section>
 
   <!-- ARCHITECTURE / INTEGRATION -->
   <section class="arch">
-    <p class="section-label">Under the hood</p>
-    <h2>Simple architecture, powerful result</h2>
-    <p>Four components. One API call to Instacart. No complex infrastructure.</p>
+    <p class="section-label">Built on</p>
+    <h2>Best-in-class AI, one seamless loop</h2>
+    <p>Pixtral for vision. Mistral for planning. ElevenLabs for your chef. Instacart for groceries.</p>
 
     <div class="arch-flow">
       <div class="arch-node">
-        <div class="arch-node-icon">🧠</div>
-        <h4>AI Meal Planner</h4>
-        <p>Generates personalized weekly meals, avoids repeats, maximizes ingredient overlap</p>
-        <span class="arch-tag">Claude API</span>
+        <div class="arch-node-icon">📸</div>
+        <h4>Visual scanner</h4>
+        <p>Ingredient detection with bounding boxes — labels on the image, tap to fix misses</p>
+        <span class="arch-tag">Pixtral 12B</span>
       </div>
       <div class="arch-arrow">→</div>
       <div class="arch-node">
         <div class="arch-node-icon">📋</div>
-        <h4>Grocery Engine</h4>
-        <p>Deduplicates ingredients, adjusts quantities, excludes pantry staples</p>
-        <span class="arch-tag">OnlyPans</span>
+        <h4>Meal plan & pantry</h4>
+        <p>3-day plan by pantry match, living pantry updates after every cook</p>
+        <span class="arch-tag">Mistral Large</span>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="arch-node-icon">🎙️</div>
+        <h4>Voice chef</h4>
+        <p>G-Rams reads steps aloud, answers questions, hands-free commands</p>
+        <span class="arch-tag tag-accent">ElevenLabs · Web Speech API</span>
       </div>
       <div class="arch-arrow">→</div>
       <div class="arch-node">
         <div class="arch-node-icon">🛒</div>
-        <h4>Product Matching</h4>
-        <p>Maps ingredients to real SKUs, checks availability, builds shoppable cart</p>
-        <span class="arch-tag tag-accent">Instacart IDP</span>
-      </div>
-      <div class="arch-arrow">→</div>
-      <div class="arch-node">
-        <div class="arch-node-icon">📱</div>
-        <h4>You</h4>
-        <p>Review products, pick delivery window, checkout in 60 seconds</p>
+        <h4>Groceries</h4>
+        <p>One-tap list to Instacart. Checkout in-app.</p>
         <span class="arch-tag tag-accent">Instacart</span>
       </div>
     </div>
 
     <div class="arch-detail">
       <div class="arch-detail-item">
-        <h5>Instacart Integration</h5>
-        <p>Single endpoint: <code>POST /idp/v1/products/recipe</code> creates a shoppable page with matched products. Users complete checkout natively in the Instacart app.</p>
+        <h5>Visual Fridge Scanner</h5>
+        <p>Pixtral 12B returns ingredients with bounding box coordinates. Frosted-glass labels render on the photo; tap any unlabeled area to identify missed items. Collision avoidance keeps labels readable.</p>
       </div>
       <div class="arch-detail-item">
-        <h5>What We Don't Touch</h5>
-        <p>Payment, delivery logistics, shopper assignment, and substitution handling are all managed by Instacart. We generate the list — they handle the rest.</p>
+        <h5>Cook Mode</h5>
+        <p>Full-screen dark UI for the kitchen. G-Rams is a custom British chef voice (ElevenLabs). Web Speech API for "next", "repeat", and open-ended questions — answers in context, then back to the recipe.</p>
       </div>
       <div class="arch-detail-item">
-        <h5>Store Coverage</h5>
-        <p>Instacart's network of 1,500+ retail banners means OnlyPans works everywhere — Whole Foods, Safeway, Costco, Kroger, and thousands more.</p>
+        <h5>Living Pantry</h5>
+        <p>After cooking, Mistral infers what you used and marks items ok, low, or depleted. The next 3-day plan reflects your real pantry. Less waste, smarter suggestions.</p>
       </div>
       <div class="arch-detail-item">
-        <h5>Human in the Loop</h5>
-        <p>No order is placed without user review. Every week, you see the full meal plan and grocery list before tapping "checkout." Swap, remove, or add anything.</p>
+        <h5>Tech stack</h5>
+        <p><code>Next.js 15</code> · Pixtral 12B · Mistral Large · ElevenLabs · Web Speech API · Instacart. No complex infrastructure — the loop runs in the app.</p>
       </div>
     </div>
   </section>
 
+  <!-- COMING SOON -->
+  <section class="coming-soon">
+    <p class="section-label">Coming soon</p>
+    <h2>What we're building next</h2>
+    <ul class="coming-soon-list">
+      <li><strong>Nutrition tracking</strong> — Per-meal calories, protein, carbs, fat; daily summary across planned meals.</li>
+      <li><strong>Recipe discovery</strong> — Browse by cuisine, cook time, difficulty, seasonal ingredients. Save favorites to your pantry-aware plan.</li>
+      <li><strong>Allergy & dietary</strong> — Set profile once (allergies, vegan, gluten-free, halal, keto). Every recipe, plan, and grocery order filters automatically. G-Rams never suggests what you can't eat.</li>
+      <li><strong>Household mode</strong> — Multiple people, different diets. Meal plan reconciles everyone's preferences.</li>
+      <li><strong>Cuisine preferences</strong> — Tell us what you love (Italian, Japanese, Mediterranean). The planner weights it while still prioritizing what you have.</li>
+    </ul>
+  </section>
+
   <!-- BOTTOM CTA -->
-  <section class="bottom-cta" id="waitlist">
+  <section class="bottom-cta">
     <h2>Stop overthinking dinner.</h2>
-    <p>Join the waitlist. We'll let you in soon.</p>
-    <form class="hero-form" id="bottom-signup">
-      <input type="email" placeholder="your@email.com" required>
-      <button type="submit">Join the Waitlist</button>
-    </form>
-    <p style="margin-top:1.25rem;position:relative;"><a href="https://onlypans-app.vercel.app/" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500;text-decoration:none;">Already have access? Open the app →</a></p>
+    <p>Scan your fridge, get your plan, cook with G-Rams.</p>
+    <a href="https://onlypans-app.vercel.app/" class="hero-cta" target="_blank" rel="noopener">Open OnlyPans</a>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>OnlyPans is built by <a href="https://pipelineom.com" target="_blank" rel="noopener">OM</a> · <a href="https://onlypans-app.vercel.app/" target="_blank" rel="noopener">Open the app</a> · San Francisco, CA</p>
+    <p><strong>OnlyPans.</strong> Your AI sous chef.</p>
+    <p style="margin-top:0.5rem;">Built on Pixtral 12B · Mistral Large · ElevenLabs · Web Speech API · Next.js 15 · Instacart</p>
+    <p style="margin-top:0.75rem;">By <a href="https://pipelineom.com" target="_blank" rel="noopener">OM</a> · <a href="https://onlypans-app.vercel.app/" target="_blank" rel="noopener">Open the app</a> · San Francisco, CA</p>
   </footer>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast">✓ You're on the list. We'll be in touch.</div>
-
   <script>
-    // ─── Waitlist signup (stores emails in localStorage for now, swap for real backend later)
-    function handleSignup(e) {
-      e.preventDefault();
-      const input = e.target.querySelector('input');
-      const email = input.value.trim();
-      if (!email) return;
-
-      // In production: POST to your API / Supabase / Airtable
-      console.log('Waitlist signup:', email);
-
-      input.value = '';
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    document.getElementById('hero-signup').addEventListener('submit', handleSignup);
-    document.getElementById('bottom-signup').addEventListener('submit', handleSignup);
-
     // ─── Demo animation on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
